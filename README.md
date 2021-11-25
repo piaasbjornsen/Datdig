@@ -149,5 +149,187 @@ Fordi én instuksjon gjøres per klokkesykel og det er 10<sup>9</sup>/T klokkesy
 F.eks. hvis T = 2 nsec, 500 millioner instukser blir utført hvert sekund. For å få antall MIPS, må vi dele instuksjonsraten på 1 million (10<sup>9</sup>/T)/10<sup>6</sup> = 1000/T MIPS. 
 
 **Superskaler arkitekturer**
+### 2.1.6 Prosessor nivå parallelisme 
+
+Den eneste måten å gjøre datamaskiner raskere med en factor av 50, 100 eller mer, er å designe maskiner med flere CPU'er. Nå skal vi se litt på hvordan disse er organisert. 
+
+**Array datamaskiner**
+En array prosessor består av mange like prosessorer som utfører de samme rekkene med intruksjoner på forkjellige sett med data. 
+En vektor prosessor ser veldig lik ut som en arrat prosessor. I likhet med en arrat prosessor, utfører den rekker av operasjoner på par av dataelementer raskt. Men ulikt en array prosessor, blir alle addisjons operasjonene utført på én tungt pipelinet prosessor. 
+
+Bårde array og vektor prosessorer funker på arrays av data. Bege utfører én instruksjon. Men der en array prosessor gjør det ved å ha like mange adderere som elementer i vektoren, har vektor prosessoren en konsept om **vektor registre**, som består av et set registre som kan lades fea minnet i én instruksjon, som laster dem fra minnet i serie. Så utfører en vektor addisjon intruks parvis addisjon av elementene av to slike vektorer ved å mate dem til en pipelined adderer fra de to vektor reistrene. 
+
+**Multiprocessors**
+
+**Multicomputers**
+
+### 2.2.1 Bits
+* BCD (Binary Coded Decimal)
+
+### 2.2.2 Minne adresser
+## 2.3 Sekundær minne
+### 2.3.1 Minne hierarki 
+### 2.3.2
+## 2.4 INPUT/OUTPUT
+### 2.4.1 Busser
 
 
+# 3 Digitalt logisk nivå (Digital logic level)
+I dette kapitler blir det gått gjennom aspektre ved digital logikk, som en byggesten for de neste kapitlene. 
+## 3.1 Gates og boolean algebra 
+En digital krets er en hvor bare to logiske verdier finnes. Typisk er det et signal mellom 0 og 1 volt som representerer én verdi (f.eks. binær 0) og et signal mellom 2 og 5 velt som representerer den andre verdien (f.eks. binær 1). Volt utenfor disse to verdiene er ikke lovlige. 
+Små elektroniske enheter, **gates**, kan utføre forskjellige funksjoner på disse to signalverdiene. Disse komponentene danner basisen for hardware som alle maskiner er bygget på. 
+
+> De tre enkleste gates 
+> ***NOT***
+* Blir ofte kaldt inverterere
+* 
+> ***NAND***
+> ***NOR***
+> 
+### 3.1.1 Gates
+### 3.1.2 Boolsk algebra 
+* Switching algebra 
+
+### 3.2.4 Klokker
+I mange kretser er rekkefølgen tinge skjer på kritisk. Noen ganger må en hendelse komme før en anne, noen ganger må to hendelser skje samtidig. For å få til dette bruker mange kretser klokker. 
+En **klokke** i denne konteksten er en krets som sender ut en pulsserie med presis bredde og pulser. 
+Tidsintervallet mellom to tilsvarende kanter av to påfølgende pulser kalles **klokkesykel tiden** (clock cycle time). 
+
+I en datamaskin kan mange ting skje på en klokkesykel. Hvis disse må skje i en spesiell rekkefølge, må klokkesyklen deles inne i subsykler. En måte å gjøre dette på der å tappe inn på hovedsyklen og sette inn en krets med en gitt og kjent forsinkelse. Dette lager en sekundær klokkesykel som er faseskiftet fra hovedsyklen. 
+![Delayd clock cycle](../Bilder/Delayd clock cycle.png)
+
+I noen kretser er man mer interesert i tidsintervaller enn diskre øyeblikk av tiden. 
+F.eks. kan noen hendelser skje så lenge C1 er høy, heller enn akkurat på en stigende flanke. En annen hendelse kan skje når C2 er høy. 
+
+Det er verdt å merke seg at klokker er symetriske. Dvs. tiden den er høy er lik tiden den er lav. For å generere en asymetrisk puls kan kolkken skiftes ved å bruke en delay  og en AND med den originale klokken (Fig. 3-21 (c)).
+
+## 3.3 Minne
+
+En essensiell komponent av alle datamaskiner er minnet. 
+
+> **Bruk:**
+> * Lagre intruksjoner
+> * Lagre data
+
+### 3.3.1 Vipper (Latches)
+For å lage et 1-bit minne, trenger vi en krets som "husker" tidligere input verdier. En slik krets kan lages av to NOR gates (Fig. 3-22 (a)).
+
+![img_2.png](../Bilder/Vippe.png)
+
+Figur (a) er kaldt en SR vippe. Den er to inputs, S (for å sette vippen) og R (for å resette). Den har også to outputs, Q og komplementet av Q. 
+For R = S = 0 har vippen to stabile tilstander, 0 eller 1, avhengid av Q. 
+Setter vi S = 1, vil vippen få tilstanden Q = 1.
+Setter vi R = 1, vil vippen få tilstanden Q = 0. 
+Kretsen "husker" om S eller R var den siste til å være 1. 
+
+**Clocked SR latched**
+Hvis man bare ønsker at vippen skal være aktiv på visse tidspunkter kan man koble den til en klokke som vist under. Nå har kretsen tre inputs, S, R og klokken.
+![img_2.png](../Bilder/ClockedLatch.png)
+
+Klokken er vanligvis 0, og da vil AND gatene gjøre S og R er ubetydelig (og uansett gi ut 0). 
+Når klokken er 1, vil S og R gatene være avgjørende. Vippen blir altså sensitiv til S og R inputsene. 
+Man burkes ofte **enable** eller **strobe** for å vise til klokke-inputen (altså om vippen er sensitiv til S og R, eller ikke).
+
+**Clocked D latches**
+Denne vippen har bare én input, D. Fordi begge AND gatene bruker D som input (D og komplementet til D) vil de to AND gatene aldri begge være 1. 
+Når klokken er 1 og D = 1, vil vippen få tilstand Q = 1. 
+Når klokken er 1 og D = 0, vil vippen få tilstand Q = 0. 
+Med andre ord. Når klokken er 1, vil den nåværende verdien til D bli lagret i vippen. 
+For å laste den nåværende verdien av D til minnet, må klokkepulsen være 1. 
+
+![img_2.png](../Bilder/DLatch.png)
+
+### 3.3.2 Flip-Flops
+I mange kretser er det nødvendig å sample verdien på en spesiell linje til en spesiel tid og lagre den. 
+I denne varianten er ikke verdien lagret når klokken er 1, men når flanken er stigende eller synkende. Dermed er lengden på pulsen uviktig, så lenge overgangen er rask. 
+
+### 3.3.3 Registre
+### 3.3.4 Minne organisering
+![img_2.png](../Bilder/Minne.png)
+![img_2.png](../Bilder/MinneForklart.jpg)
+
+> **Signalene**
+> * CS (Chip Select):
+>  * Forteller minnet hvilken chip vi ønsker å bruke
+> * WE (Write Enable)
+>  * Indikerer at data skal bli skrevet
+> * RD (Read)
+>  * Indikerer at data skal leses
+> * OE (Output Enable)
+>  * Signaliserer at outputs skal sendes
+
+
+### 3.3.5 Minne chips
+Det som er fint med minnet avbildet over, er at det er lett å lage større minner. 
+I bildet er det et 4x3 minne (fire ord på 3 bits). For å utvide til et 4x8 minne (fire ord på 8 bits), må vi bare legge til 5 kolonner til (med 4 flip-flops hver), fem flere I<sub>i</sub> inputs, og en adresse linje A<sub>3</sub> til. 
+
+### 3.3.6 RAMs og ROMs
+***RAM***
+Så langt har vi sett på minner som kan skrives og leses til, dette er RAM (Random Access Memory). 
+RAM kommer i to typer; Statiske og dynamiske.
+
+>**Statisk RAM**
+>* Er kontruert ved å bruke krretser lignende D flip-flops. 
+>* Verdiene er beholdt så lenge strømmen er på 
+>* Raske; Typsik access tid er et par nsek. 
+>* Vanlige som level 2 cache minne 
+
+>**Dynamisk RAM**
+>* Bruker ikke flip-flops
+>* Array av celler 
+>  * Som hver inneholder én transistor og én kondensator per bit (vs 6 transistorer i statisk)
+>  * Kondensatoren kan bli ladd eller uladd (0 og 1)
+>* Hver bit må bli refreshed (reloaded) for å motvirke at data lekker
+>  * Ekstern logikk må refreshe, dermed krever dynamisk mer kompleks interfacing enn statisk
+>* Stor kapasitanse 
+>* Høy tetthet av bits per chip
+>* Tregere
+
+***ROM***
+Minner som bare kan lese. Brukes gjerne i leker, biler osv (ting hvor den interne dataen aldri trengs å forandres). 
+Når det er instalert, trengr vi aldri å endre program eller data. 
+ROM står for Read Only Memory. Den eneste måten å endre program i en ROM på, er å bytte ut hele chipen. 
+ROM er mye billige enn RAM. 
+
+### 3.4.1 CPU chips
+Alle moderen CPUer er inkapslet i en eneste chip. Hver CPU har et set av pins, hvor all kommunikasjon med det eksterne må gjennom. Noen gir ut informasjon, noen tar inn. Ved å forstå funksjonene til alle pinsene, kan vi lære hvordan CPUen interagerer med minnet og I/O enhetene via en samling av parallelle koblinger (en buss). 
+
+For å hente instruksjoner, legger CPUen minneadressen til intruksjonene på adresse pinnene. Deretter forteller den til en eller flere av kontrolllinjene at minne vil lese. Minne responderer ved å legge det ønskede ordet på CPUens datapins og fortelle at det er gjort. Når CPU'en ser dette signalet, aksepterer den ordet og utfører instuksjonen. 
+For nå er det viktige å vite at CPUen kommuniserer med minnet og I/O enheten ved å gi signaler til pinsene og akseptere singaler på pinsene. Ingen annen kommunikasjon er mulig 
+
+To av de viktigste variablene som bestemmer CPUens prestasjon er hvor mange adresse- og datapins den har. En chip med *m* adressepins kan adressere opp til 2<sup>*m*</sup> minne lokasjoner. Lignende kan en chip med *n* datapins lese og skrive et n-bit ord i én operasjon. 
+Altså en CPU med 8 datapins bruker 4 operasjoner på å lese et 32-bit ord, hvor en med 32 datapins kan gjøre det samme i én operasjon. 
+
+I tillegg til dette har CPUer også kontrollpins. Disse regulerer flyten og timingen til data fra og til CPUen. Kontrollpinsene kan grupperes inn i 6 hovedkategorier.
+
+>***Kontrollpins***
+>1. Buss kontroller
+>   * Hovedsakelig outputs fra CPUen til bussen (dermed inputs til minnet og I/O chips) som forteller om CPU vil lese eller skrive til minnet, eller gjøre noe annet.
+>2. Interrupts
+>   * Inputs fra I/O enheten til CPUen som forteller CPUen at den er ferdig å gjøre sin operasjon.
+>3. Buss arbitration
+>   * Regulerer trafikk på bussen, for å forhindre at to enheter prøver å bruke den samtidig.
+>4. Coprocessor signaling
+>5. Status
+>6. Miscellaneous
+
+
+### 3.4.2 Databuss
+En buss er en vanlig elektronisk pathway mellom flere enheter. De kan kategoriseres etter deres funksjon. De kan brukes internt i en CPU for å flytte data til og fra ALU'en, eller eksternt fra CPUen, for å forbinde minne til I/O enhetene.
+![img_2.png](../Bilder/Bus.png)
+
+
+
+
+
+
+
+
+
+
+
+# Se på 
+* Egenskaper vedd RISC-prosessor
+* Egenskaper ved CISC-prosessor 
+* 
